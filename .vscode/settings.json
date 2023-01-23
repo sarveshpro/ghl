@@ -2,5 +2,8 @@
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": true
   },
-  "editor.formatOnSave": false
+  "editor.formatOnSave": false,
+  "conventionalCommits.scopes": [
+    "setup", "route", "model", "tests", "logs", "env", "firestore", "docs", "validation", "handler", "middleware", "controller", "interface", "service",
+  ]
 }
