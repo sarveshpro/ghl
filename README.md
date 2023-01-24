@@ -38,7 +38,7 @@ View the API documentation at `http://localhost:3000/api-docs`
 
 ## Testing
 
-No tests have been written for this project.
+Run `npm run test` to run the test suite.
 
 ## Deployment
 
