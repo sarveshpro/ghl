@@ -1,5 +1,7 @@
 # GOHIGHLEVEL BACKEND DEV HIRING CHALLENGE
 
+Deployment Link - https://ghl-production.up.railway.app/
+
 ## Introduction
 
 The purpose of this tool (GHL) is to make appointment booking between people a lot easier. The
@@ -34,7 +36,7 @@ usual process is to exchange mails between people till they find a convenient ti
 
 ## Usage
 
-View the API documentation at `http://localhost:3000/api-docs`
+View the API documentation at [API Docs](https://ghl-production.up.railway.app/api-docs/)
 
 ## Testing
 
