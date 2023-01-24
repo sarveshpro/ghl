@@ -1,123 +1,90 @@
 tags:
-- name: users
-  description: users API
+  - name: Events
+    description: Events API endpoints
+  - name: Availability
+    description: Availability API endpoints
 
 paths:
-# [GET] users
-  /users:
+  # [GET] events
+  /events:
     get:
       tags:
-      - users
-      summary: Find All Users
+        - Events
+      summary: Get All Events or Events in a Date Range
+      parameters:
+        - name: startDate
+          in: query
+          description: Date in ISO 8601 format eg. 2023-01-24T09:00:00.000+05:30
+          schema:
+            type: date
+        - name: endDate
+          in: query
+          description: Date in ISO 8601 format eg. 2023-01-24T09:00:00.000+05:30
+          schema:
+            type: date
+        - name: timezone
+          in: header
+          description: Timezone in ISO 8601 format eg. Asia/Kolkata.
+          schema:
+            type: string
       responses:
         200:
           description: 'OK'
+        409:
+          description: 'Conflict'
         500:
           description: 'Server Error'
 
-# [POST] users
+    # [POST] events
     post:
       tags:
-      - users
-      summary: Add User
-      parameters:
-      - name: body
-        in: body
-        description: user Data
-        required: true
-        schema:
-          $ref: '#/definitions/users'
+        - Events
+      summary: Add New Event
+      requestBody:
+        content:
+          application/json:
+            schema: # Request body contents
+              type: object
+              properties:
+                time:
+                  type: string
+                duration:
+                  type: integer
+              example: # Sample object
+                time: '2023-01-24T09:00:00.000+05:30'
+                duration: 30
       responses:
         201:
-          description: 'Created'
+          description: 'Event Created'
         400:
           description: 'Bad Request'
         409:
-          description: 'Conflict'
+          description: 'Conflicting Event Found'
         500:
           description: 'Server Error'
-
-# [GET] users/id
-  /users/{id}:
+  /availability:
+    # [GET] availability
     get:
       tags:
-      - users
-      summary: Find User By Id
+        - Availability
+      summary: Get Free Slots in a Date Range
       parameters:
-      - name: id
-        in: path
-        description: User Id
-        required: true
-        type: integer
+        - name: startDate
+          in: query
+          description: startDate
+          required: true
+          type: date
+        - name: endDate
+          in: query
+          description: endDate
+          required: true
+          type: date
       responses:
         200:
           description: 'OK'
-        409:
-          description: 'Conflict'
         500:
           description: 'Server Error'
-
-# [PUT] users/id
-    put:
-      tags:
-      - users
-      summary: Update User By Id
-      parameters:
-      - name: id
-        in: path
-        description: user Id
-        required: true
-        type: integer
-      - name: body
-        in: body
-        description: user Data
-        required: true
-        schema:
-          $ref: '#/definitions/users'
-      responses:
-        200:
-          description: 'OK'
-        400:
-          description: 'Bad Request'
-        409:
-          description: 'Conflict'
-        500:
-          description: 'Server Error'
-
-# [DELETE] users/id
-    delete:
-      tags:
-      - users
-      summary: Delete User By Id
-      parameters:
-      - name: id
-        in: path
-        description: user Id
-        required: true
-        type: integer
-      responses:
-        200:
-          description: 'OK'
-        409:
-          description: 'Conflict'
-        500:
-          description: 'Server Error'
-
-# definitions
-definitions:
-  users:
-    type: object
-    required:
-        - email
-        - password
-    properties:
-      email:
-        type: string
-        description: user Email
-      password:
-        type: string
-        description: user Password
 
 schemes:
- - https
- - http
+  - https
+  - http

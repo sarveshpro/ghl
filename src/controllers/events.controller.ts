@@ -35,18 +35,7 @@ class EventsController {
         return modifiedEvent;
       });
 
-      res.status(200).json({ data: modifiedEvents, message: 'Get all events' });
-    } catch (error) {
-      next(error);
-    }
-  };
-
-  public getEventById = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-    try {
-      const eventId = req.params.id as string;
-      const findOneEventData: Event = await this.eventService.findEventById(eventId);
-
-      res.status(200).json({ data: findOneEventData, message: 'findOne' });
+      res.status(200).json({ data: modifiedEvents, message: `${modifiedEvents.length} events found` });
     } catch (error) {
       next(error);
     }
@@ -57,7 +46,7 @@ class EventsController {
       const eventData: CreateEventDto = req.body;
       const createEventData: Event = await this.eventService.createEvent(eventData);
 
-      res.status(201).json({ data: createEventData, message: 'created' });
+      res.status(201).json({ data: createEventData, message: '1 event created' });
     } catch (error) {
       next(error);
     }

@@ -1,4 +1,4 @@
-import { CreateEventDto, GetAllEventsDto } from '@dtos/events.dto';
+import { CreateEventDto } from '@dtos/events.dto';
 import { HttpException } from '@exceptions/HttpException';
 import { Event, EventForFirestore } from '@interfaces/events.interface';
 import eventModel from '@models/events.model';

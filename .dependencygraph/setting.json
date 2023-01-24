@@ -1,0 +1,24 @@
+{
+  "alias": {
+    "@/*": "src/*",
+    "@config": "src/config",
+    "@controllers/*": "src/controllers/*",
+    "@dtos/*": "src/dtos/*",
+    "@exceptions/*": "src/exceptions/*",
+    "@interfaces/*": "src/interfaces/*",
+    "@middlewares/*": "src/middlewares/*",
+    "@models/*": "src/models/*",
+    "@routes/*": "src/routes/*",
+    "@services/*": "src/services/*",
+    "@utils/*": "src/utils/*"
+  },
+  "resolveExtensions": [
+    ".js",
+    ".jsx",
+    ".ts",
+    ".tsx",
+    ".vue",
+    ".scss",
+    ".less"
+  ]
+}
