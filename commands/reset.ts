@@ -14,6 +14,5 @@ events.get().then(snapshot => {
   snapshot.forEach(doc => {
     doc.ref.delete();
   });
+  console.log('done');
 });
-
-console.log('done');

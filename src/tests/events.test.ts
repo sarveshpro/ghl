@@ -24,7 +24,7 @@ describe('Testing Events', () => {
     });
   });
   describe('[POST] /events', () => {
-    it('response should have either have 200 or 409 status code', () => {
+    it('response should have have 200', () => {
       const eventData: CreateEventDto = {
         time: '2023-01-24T09:00:00.000+05:30',
         duration: 30,
@@ -32,7 +32,7 @@ describe('Testing Events', () => {
       const eventsRoute = new EventsRoute();
       const app = new App([eventsRoute]);
 
-      return request(app.getServer()).post('/events').send(eventData);
+      return request(app.getServer()).post('/events').send(eventData).expect(201);
     });
     it('response should have 409 status code because trying to create a overlapping event', () => {
       const eventData: CreateEventDto = {
@@ -42,7 +42,7 @@ describe('Testing Events', () => {
       const eventsRoute = new EventsRoute();
       const app = new App([eventsRoute]);
 
-      return request(app.getServer()).post('/events').send(eventData);
+      return request(app.getServer()).post('/events').send(eventData).expect(409);
     });
   });
 
