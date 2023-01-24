@@ -2,30 +2,40 @@ import { NextFunction, Request, Response } from 'express';
 import { CreateEventDto } from '@dtos/events.dto';
 import eventService from '@services/events.service';
 import { Event } from '@/interfaces/events.interface';
-import { dateToISOString, dateToTimezoneISOString } from '@/utils/date';
+import { toISOString, toServerTimezoneFromISOString } from '@/utils/date';
+import { isEmpty } from '@/utils/util';
+import { HttpException } from '@/exceptions/HttpException';
 
 class EventsController {
   public eventService = new eventService();
 
   public getEvents = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-      const findAllEventsData: Event[] = await this.eventService.findAllEvent();
+      // get filters from query params
+      const query = req.query;
+
+      const filters = {
+        startDate: isEmpty(query.startDate) ? undefined : toServerTimezoneFromISOString(query.startDate as string),
+        endDate: isEmpty(query.endDate) ? undefined : toServerTimezoneFromISOString(query.endDate as string),
+      };
+
+      const findAllEventsData: Event[] = await this.eventService.findAllEvent(filters);
+
+      if (isEmpty(findAllEventsData)) throw new HttpException(409, 'There are no events');
 
       // convert date to timezone from headers
       const timezone = req.headers.timezone as string;
 
       const modifiedEvents = findAllEventsData.map(event => {
-        const startTime = new Date(event.startTime);
-        const endTime = new Date(event.endTime);
         const modifiedEvent = {
           ...event,
-          startTime: timezone ? dateToTimezoneISOString(startTime, timezone) : dateToISOString(startTime),
-          endTime: timezone ? dateToTimezoneISOString(endTime, timezone) : dateToISOString(endTime),
+          startTime: toISOString(event.startTime, timezone),
+          endTime: toISOString(event.endTime, timezone),
         };
         return modifiedEvent;
       });
 
-      res.status(200).json({ data: modifiedEvents, message: 'findAll' });
+      res.status(200).json({ data: modifiedEvents, message: 'Get all events' });
     } catch (error) {
       next(error);
     }
@@ -44,33 +54,10 @@ class EventsController {
 
   public createEvent = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-      const userData: CreateEventDto = req.body;
-      const createEventData: Event = await this.eventService.createEvent(userData);
+      const eventData: CreateEventDto = req.body;
+      const createEventData: Event = await this.eventService.createEvent(eventData);
 
       res.status(201).json({ data: createEventData, message: 'created' });
-    } catch (error) {
-      next(error);
-    }
-  };
-
-  public updateEvent = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-    try {
-      const eventId = req.params.id as string;
-      const userData: CreateEventDto = req.body;
-      const updateEventData: Event = await this.eventService.updateEvent(eventId, userData);
-
-      res.status(200).json({ data: updateEventData, message: 'updated' });
-    } catch (error) {
-      next(error);
-    }
-  };
-
-  public deleteEvent = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-    try {
-      const eventId = req.params.id as string;
-      const deleteEventData: Event = await this.eventService.deleteEvent(eventId);
-
-      res.status(200).json({ data: deleteEventData, message: 'deleted' });
     } catch (error) {
       next(error);
     }

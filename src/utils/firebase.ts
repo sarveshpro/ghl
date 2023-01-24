@@ -2,7 +2,7 @@
 import * as admin from 'firebase-admin';
 import { Event } from '@/interfaces/events.interface';
 import serviceAaccount from '../config/serviceAccount.json';
-import { timestampToDate } from './date';
+import { fromTimestampToServerTimezone } from './date';
 
 class Firestore {
   private static instance: Firestore;
@@ -13,6 +13,7 @@ class Firestore {
       credential: admin.credential.cert(serviceAaccount as admin.ServiceAccount),
     });
     this.db = admin.firestore();
+    this.db.settings({ ignoreUndefinedProperties: true });
   }
 
   public static getInstance(): Firestore {
@@ -40,9 +41,9 @@ export const snapshotToEvents = (snapshot: admin.firestore.QuerySnapshot): Event
     const event: Event = {
       id: doc.id,
       ...data,
-      // convert firestore timestamp to ISO string
-      startTime: timestampToDate(data.startTime),
-      endTime: timestampToDate(data.endTime),
+      // convert firestore timestamp to luxon datetime
+      startTime: fromTimestampToServerTimezone(data.startTime),
+      endTime: fromTimestampToServerTimezone(data.endTime),
     };
     events.push(event);
   });

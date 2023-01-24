@@ -1,7 +1,9 @@
+import { DateTime } from 'luxon';
+
 export interface Event {
   id: string;
-  startTime: Date;
-  endTime: Date;
+  startTime: DateTime;
+  endTime: DateTime;
   metaData?: EventMetaData;
 }
 
