@@ -13,7 +13,7 @@ class EventService {
     const { startDate, endDate } = filters;
 
     // firebase query
-    let query = this.events;
+    let query = this.events as FirebaseFirestore.Query;
 
     // if startDate is provided, query events that start after startDate
     if (startDate) {

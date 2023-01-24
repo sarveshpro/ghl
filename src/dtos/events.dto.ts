@@ -7,7 +7,8 @@ export class CreateEventDto {
   @Min(10)
   @Max(120)
   public duration: number;
-  public metaData: any;
+  @IsOptional()
+  public metaData?: any;
 }
 
 export class GetAllEventsDto {
