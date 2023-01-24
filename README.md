@@ -1,5 +1,7 @@
 # GOHIGHLEVEL BACKEND DEV HIRING CHALLENGE
 
+Deployment Link - https://ghl-production.up.railway.app/
+
 ## Introduction
 
 The purpose of this tool (GHL) is to make appointment booking between people a lot easier. The
