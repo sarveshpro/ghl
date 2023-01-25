@@ -1,6 +1,8 @@
 # GOHIGHLEVEL BACKEND DEV HIRING CHALLENGE
 
-Deployment Link - https://ghl-production.up.railway.app/
+Frontend Url - https://ghl-frontend.vercel.app/
+Backend Url - https://ghl-production.up.railway.app/
+API Docs - https://ghl-production.up.railway.app/api-docs/ (incomplete)
 
 ## Introduction
 
@@ -37,6 +39,16 @@ usual process is to exchange mails between people till they find a convenient ti
 ## Usage
 
 View the API documentation at [API Docs](https://ghl-production.up.railway.app/api-docs/)
+
+## Structure
+
+### Database
+
+I have used firestore as the database in this project. there is a single collection called `events` which consists of the following properties -
+
+- startTime(Timestamp) - session start time
+- endTime(Timestamp) - session end time
+- metadata(optional object) - was intended to support custom form data like name, email, phone. but did not implement.
 
 ## Testing
 
