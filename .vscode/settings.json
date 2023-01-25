@@ -18,6 +18,7 @@
     "controller",
     "interface",
     "service",
-    "api"
+    "api",
+    "logic"
   ]
 }
