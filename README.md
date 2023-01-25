@@ -57,6 +57,18 @@ I have used firestore as the database in this project. there is a single collect
 
 For backend application I went for a typescript-express stack. I used the `typescript-express-starter` template to initialize the project.
 
+### Logic for some important functionality
+
+#### Generating Free Slots
+
+1. get date range, event duration and timezone in query
+2. validate input for invalid date range, duration and timezone
+3. get all time slots in date range, divide time by duration in minutes and store start time of each slot in an array
+4. filter slots to keep only the ones that fall inside the owner's availability time range
+5. compare with events to check for conflict that fall within the requested time range (in actual implementation I missed this part and I am camparing with all events. this can be improved)
+3. for the remaining slots which do not have any conflict, convert the time to user timezone and return to the user.
+
+
 ## Testing
 
 Run `npm run test` to run the test suite.
