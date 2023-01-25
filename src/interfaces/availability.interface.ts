@@ -1,4 +1,6 @@
 export interface AvailabilityRequest {
-  date: string;
+  startDate: string;
+  endDate: string;
+  duration: number;
   timezone: string;
 }

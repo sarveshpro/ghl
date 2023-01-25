@@ -2,7 +2,8 @@ import { NextFunction, Request, Response } from 'express';
 import { DURATION } from '@/config';
 import EventService from '@services/events.service';
 import AvailabilityService from '@services/availability.service';
-import { addDuration, isOverlapping, toServerTimezoneFromISOString } from '@/utils/date';
+import { addDuration, isOverlapping, isValidDateRange, isValidTimezone, toServerTimezoneFromISOString } from '@/utils/date';
+import { HttpException } from '@/exceptions/HttpException';
 
 class AvailabilityController {
   public eventService = new EventService();
@@ -15,9 +16,23 @@ class AvailabilityController {
 
       const startDate = toServerTimezoneFromISOString(query.startDate as string);
       const endDate = toServerTimezoneFromISOString(query.endDate as string);
+      const duration = Number(query.duration);
+      const timezone = query.timezone as string;
+
+      if (!isValidDateRange(startDate, endDate)) {
+        throw new HttpException(400, 'Invalid date range');
+      }
+
+      if (duration < 0 || duration > 120) {
+        throw new HttpException(400, 'Invalid duration');
+      }
+
+      if (!isValidTimezone(timezone)) {
+        throw new HttpException(400, 'Invalid timezone');
+      }
 
       // get availability between given dates
-      const availability = await this.availabilityService.findAvailabilityBetweenDates(startDate, endDate);
+      const availability = await this.availabilityService.findAvailabilityBetweenDates(startDate, endDate, duration);
 
       // get events from db
       const events = await this.eventService.findAllEvent({});
@@ -32,7 +47,10 @@ class AvailabilityController {
         return isSlotFree;
       });
 
-      res.status(200).json({ data: freeSlots, message: 'free slots' });
+      // convert slots to client timezone
+      const clientTimezoneSlots = freeSlots.map(slot => slot.setZone(timezone));
+
+      res.status(200).json({ data: clientTimezoneSlots, message: 'free slots' });
     } catch (error) {
       next(error);
     }

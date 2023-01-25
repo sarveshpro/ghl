@@ -1,26 +1,24 @@
 import { HttpException } from '@/exceptions/HttpException';
-import { getDatesBetween, getTimeSlots } from '@/utils/date';
+import { getTimeSlots, isDateRangeinAvailability } from '@/utils/date';
 import { isEmpty } from '@/utils/util';
 import { DateTime } from 'luxon';
 
 class AvailabiltyService {
-  public async findAvailabilityBetweenDates(startDate: DateTime, endDate: DateTime): Promise<DateTime[]> {
-    const dateArray = getDatesBetween(startDate, endDate);
-    if (isEmpty(dateArray)) throw new HttpException(409, 'There are no available slots between the dates provided');
+  public async findAvailabilityBetweenDates(startDate: DateTime, endDate: DateTime, duration: number): Promise<DateTime[]> {
+    // get slots between start and end dates
+    const allSlots = getTimeSlots(startDate, endDate, duration);
 
-    // get slots for each date and add to slots array
-    const allSlots: DateTime[] = [];
-    dateArray.forEach(date => {
-      const slots = getTimeSlots(date);
-      allSlots.push(...slots);
-    });
-
+    // check if slots are in availability
     const requestedSlots = allSlots.filter(slot => {
-      if (slot >= startDate && slot <= endDate) {
+      const startDate = slot;
+      const endDate = slot.plus({ minutes: duration });
+      if (isDateRangeinAvailability(startDate, endDate)) {
         return true;
       }
       return false;
     });
+
+    if (isEmpty(requestedSlots)) throw new HttpException(404, 'There are no available slots between the dates provided');
 
     return requestedSlots;
   }

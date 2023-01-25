@@ -47,7 +47,7 @@ export const toISOString = (datetime: DateTime, timezone?: string): string => {
 
 // function to set hours
 export const setHours = (datetime: DateTime, hours: number): DateTime => {
-  return datetime.set({ hour: hours });
+  return datetime.set({ hour: 0, minute: 0, second: 0, millisecond: 0 }).plus({ hours });
 };
 
 // get start and end of day from iso string
@@ -68,16 +68,12 @@ export const getDatesBetween = (start: DateTime, end: DateTime): DateTime[] => {
 };
 
 // get time slots using rrule between start and end hours
-export const getTimeSlots = (date: DateTime): DateTime[] => {
-  const startTime = setHours(date, Number(AVAILABILITY_START_TIME));
-  const endTime = setHours(date, Number(AVAILABILITY_END_TIME));
-  const rule = new RRule({
-    freq: RRule.MINUTELY,
-    interval: Number(DURATION),
-    dtstart: startTime.toJSDate(),
-    until: endTime.toJSDate(),
-  });
-  return rule.all().map(date => DateTime.fromJSDate(date));
+export const getTimeSlots = (startDate: DateTime, endDate: DateTime, duration: number): DateTime[] => {
+  const slots = [];
+  for (let dt = startDate; dt <= endDate; dt = dt.plus({ minutes: duration })) {
+    slots.push(dt);
+  }
+  return slots;
 };
 
 // function to check if a date range is valid
@@ -88,4 +84,17 @@ export const isValidDateRange = (start: DateTime, end: DateTime): boolean => {
 // function to check if a date range falls within a date range
 export const isWithinDateRange = (start: DateTime, end: DateTime, startRange: DateTime, endRange: DateTime): boolean => {
   return start >= startRange && end <= endRange;
+};
+
+export const isValidTimezone = (timezone: string): boolean => {
+  return DateTime.local().setZone(timezone).isValid;
+};
+
+export const isDateRangeinAvailability = (start: DateTime, end: DateTime): boolean => {
+  const date = start.startOf('day');
+
+  const availabilityStartTime = setHours(date, Number(AVAILABILITY_START_TIME));
+  const availabilityEndTime = setHours(date, Number(AVAILABILITY_END_TIME));
+
+  return isWithinDateRange(start, end, availabilityStartTime, availabilityEndTime);
 };

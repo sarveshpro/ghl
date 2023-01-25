@@ -12,10 +12,8 @@ export class CreateEventDto {
 }
 
 export class GetAllEventsDto {
-  @IsOptional()
   @IsDateString()
   public startDate: string;
-  @IsOptional()
   @IsDateString()
   public endDate: string;
 }

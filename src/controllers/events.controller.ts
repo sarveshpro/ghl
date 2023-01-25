@@ -4,7 +4,6 @@ import eventService from '@services/events.service';
 import { Event } from '@/interfaces/events.interface';
 import { toISOString, toServerTimezoneFromISOString } from '@/utils/date';
 import { isEmpty } from '@/utils/util';
-import { HttpException } from '@/exceptions/HttpException';
 
 class EventsController {
   public eventService = new eventService();
@@ -21,7 +20,7 @@ class EventsController {
 
       const findAllEventsData: Event[] = await this.eventService.findAllEvent(filters);
 
-      if (isEmpty(findAllEventsData)) throw new HttpException(409, 'There are no events');
+      // if (isEmpty(findAllEventsData)) throw new HttpException(409, 'There are no events');
 
       // convert date to timezone from headers
       const timezone = req.headers.timezone as string;

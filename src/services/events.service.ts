@@ -5,6 +5,7 @@ import eventModel from '@models/events.model';
 import { isEmpty } from '@utils/util';
 import { snapshotToEvents } from '@/utils/firebase';
 import { addDuration, isOverlapping, toFirebaseTimestamp, toServerTimezoneFromISOString } from '@/utils/date';
+import { DateTime } from 'luxon';
 
 class EventService {
   public events = eventModel.getInstance().getEvents();
@@ -60,6 +61,8 @@ class EventService {
     const eventStart = toServerTimezoneFromISOString(eventData.time);
     // get event end time from event duration
     const eventEnd = addDuration(eventStart, eventData.duration);
+
+    if (eventStart < DateTime.now()) throw new HttpException(400, 'Event cannot start in the past');
 
     for (const event of events) {
       if (isOverlapping(eventStart, eventEnd, event.startTime, event.endTime)) {
