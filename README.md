@@ -64,7 +64,3 @@ Run `npm run test` to run the test suite.
 ## Deployment
 
 This project is deployed on Railway. The database is hosted on Firebase.
-
-## License
-
-MIT
