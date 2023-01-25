@@ -4,7 +4,7 @@ import { Event, EventForFirestore } from '@interfaces/events.interface';
 import eventModel from '@models/events.model';
 import { isEmpty } from '@utils/util';
 import { snapshotToEvents } from '@/utils/firebase';
-import { addDuration, isOverlapping, toFirebaseTimestamp, toServerTimezoneFromISOString } from '@/utils/date';
+import { addDuration, isDateRangeinAvailability, isOverlapping, toFirebaseTimestamp, toServerTimezoneFromISOString } from '@/utils/date';
 import { DateTime } from 'luxon';
 
 class EventService {
@@ -64,6 +64,10 @@ class EventService {
 
     if (eventStart < DateTime.now()) throw new HttpException(400, 'Event cannot start in the past');
 
+    // check if event is in available time range
+    if (!isDateRangeinAvailability(eventStart, eventEnd)) throw new HttpException(400, 'Event is not in available time range');
+
+    // check if event overlaps with existing events
     for (const event of events) {
       if (isOverlapping(eventStart, eventEnd, event.startTime, event.endTime)) {
         throw new HttpException(409, 'Event overlaps with existing event');
