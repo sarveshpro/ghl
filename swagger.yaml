@@ -10,28 +10,25 @@ paths:
     get:
       tags:
         - Events
-      summary: Get All Events or Events in a Date Range
+      summary: Get All Events in a Date Range
       parameters:
         - name: startDate
           in: query
           description: Date in ISO 8601 format eg. 2023-01-24T09:00:00.000+05:30
+          required: true
           schema:
             type: date
         - name: endDate
           in: query
           description: Date in ISO 8601 format eg. 2023-01-24T09:00:00.000+05:30
+          required: true
           schema:
             type: date
-        - name: timezone
-          in: header
-          description: Timezone in ISO 8601 format eg. Asia/Kolkata.
-          schema:
-            type: string
       responses:
         200:
           description: 'OK'
-        409:
-          description: 'Conflict'
+        404:
+          description: 'No Events Found in the Date Range'
         500:
           description: 'Server Error'
 
@@ -71,14 +68,24 @@ paths:
       parameters:
         - name: startDate
           in: query
-          description: startDate
+          description: Start of the Date Range in ISO 8601 format eg. 2023-01-24T09:00:00.000+05:30
           required: true
           type: date
         - name: endDate
           in: query
-          description: endDate
+          description: End of the Date Range in ISO 8601 format eg. 2023-01-24T09:00:00.000+05:30
           required: true
           type: date
+        - name: duration
+          in: query
+          description: Duration of the Event in Minutes
+          required: true
+          type: integer
+        - name: timezone
+          in: query
+          description: Timezone of the Date Range eg. Asia/Kolkata
+          required: true
+          type: string
       responses:
         200:
           description: 'OK'
