@@ -68,6 +68,12 @@ For backend application I went for a typescript-express stack. I used the `types
 5. compare with events to check for conflict that fall within the requested time range (in actual implementation I missed this part and I am camparing with all events. this can be improved)
 3. for the remaining slots which do not have any conflict, convert the time to user timezone and return to the user.
 
+#### Creating a new event
+
+1. get start time and duration in request
+2. check if slot is in the owner's availability time range
+3. check for any overlap with existing events
+4. create event
 
 ## Testing
 
