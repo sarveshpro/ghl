@@ -43,7 +43,7 @@ usual process is to exchange mails between people till they find a convenient ti
 
 View the API documentation at [API Docs](https://ghl-production.up.railway.app/api-docs/)
 
-## Structure
+## Tech Stack
 
 ### Database
 
@@ -53,13 +53,17 @@ I have used firestore as the database in this project. there is a single collect
 - endTime(Timestamp) - session end time
 - metadata(optional object) - was intended to support custom form data like name, email, phone. but did not implement.
 
+### Backend App
+
+For backend application I went for a typescript-express stack. I used the `typescript-express-starter` template to initialize the project.
+
 ## Testing
 
 Run `npm run test` to run the test suite.
 
 ## Deployment
 
-This project is deployed on Heroku. The database is hosted on Firebase.
+This project is deployed on Railway. The database is hosted on Firebase.
 
 ## License
 
